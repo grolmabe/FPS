@@ -32,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void PlayerMove()
     {
-        //get the movement input
+        //get the forward-backward and side-to-side movement input
         float horizInput = Input.GetAxis(horizontalInputName);
         float vertInput = Input.GetAxis(verticalInputName);
 
@@ -40,14 +40,14 @@ public class PlayerMovement : MonoBehaviour
         Vector3 forwardMovement = transform.forward * vertInput;
         Vector3 rightMovement = transform.right * horizInput;
 
-        //charController.SimpleMove(Vector3.ClampMagnitude(forwardMovement + rightMovement, 1.0f) * movementSpeed);
-
         //get jump input
         JumpInput();
+        // If not jumping, need to apply gravity or you encounter issues with character not actually being grounded when you would expect it to be.
         if (!isJumping)
         {
             verticalMove = Physics.gravity;
         }
+        // Move the character based on the inputs
         charController.Move(((Vector3.ClampMagnitude(forwardMovement + rightMovement, 1.0f) * movementSpeed) + verticalMove) * Time.deltaTime);
     }
 
@@ -71,6 +71,7 @@ public class PlayerMovement : MonoBehaviour
         do
         {
             float jumpForce = jumpFallOff.Evaluate(timeInAir);
+            // Set the velocity vector for this frame of the jump
             verticalMove = Vector3.up * jumpForce * jumpMultiplier;
             timeInAir += Time.deltaTime;
             yield return null;
