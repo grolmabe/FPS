@@ -17,7 +17,6 @@ public class PlayerMovement : MonoBehaviour
 
     private bool isJumping;
     private Vector3 verticalVelocity;
-    private bool inFreefall;
 
     private void Awake()
     {
@@ -34,13 +33,14 @@ public class PlayerMovement : MonoBehaviour
 
     private void PlayerMove()
     {
-        //get the forward-backward, side-to-side, and jump movement input
+        // Get the forward-backward, side-to-side, and jump movement inputs.
         float lrInput = Input.GetAxis(leftRightInputName);
         float fbInput = Input.GetAxis(forwardBackwardInputName);
         bool jumpInput = Input.GetKey(jumpKey);
         
-        // Create a unit vector in the resulting requested direction of movement.
-        Vector3 horizontalDirection = Vector3.ClampMagnitude(transform.forward * fbInput + transform.right * lrInput, 1.0f);
+        // Determine the horizontal velocity based on the requested horizontal direction of movement.
+        // Do this by creating a unit vector in the requested direction, then multiplying it by the movement speed.
+        Vector3 horizontalVelocity = Vector3.ClampMagnitude(transform.forward * fbInput + transform.right * lrInput, 1.0f) * movementSpeed;
 
         /*
                 // If a jump was requested, start a jump if we are not already in a jump.
@@ -58,27 +58,22 @@ public class PlayerMovement : MonoBehaviour
 
         if (charController.isGrounded)
         {
-            isJumping = false;
-            inFreefall = false;
+            // If the character is on the ground, its vertical velocity should be zero.
             verticalVelocity = Vector3.zero;
             if (jumpInput)
             {
-                verticalVelocity += Vector3.up * jumpSpeed;
-                isJumping = true;
+                // A jump was requested, so give the player a vertical velocity upward with speed jumpSpeed.
+                verticalVelocity = Vector3.up * jumpSpeed;
             }
         }
-        else
-        {
-            if (!inFreefall)
-            {
-                inFreefall = true;
-            }
-            // Adjust the vertical speed based on gravity.
-            verticalVelocity += Physics.gravity * Time.deltaTime;
-        }
-//        print(verticalVelocity);
-        // Move the character based on the inputs
-        Vector3 moveDisplacement = ((horizontalDirection * movementSpeed) + verticalVelocity) * Time.deltaTime;
+        // Adjust the vertical velocity by the gravitational acceleration multiplied by the time elapsed.
+        // If the character is on the ground, it will simply stay on the ground as it will collide with the ground.
+        // (Apparently, this is actually necessary, because due to quirks with the CharacterController, the character sometimes ends up slightly above the ground and isGrounded is false.)
+        verticalVelocity += Physics.gravity * Time.deltaTime;
+
+        // Move the character based on the inputs.
+        // Its displacement in this frame will be its current velocity vector (the sum of the horizontal and vertical velocities) multiplied by the elapsed time.
+        Vector3 moveDisplacement = (horizontalVelocity + verticalVelocity) * Time.deltaTime;
         charController.Move(moveDisplacement);
     }
 
