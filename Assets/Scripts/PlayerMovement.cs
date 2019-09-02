@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private string horizontalInputName;
-    [SerializeField] private string verticalInputName;
+    [SerializeField] private string leftRightInputName;
+    [SerializeField] private string forwardBackwardInputName;
     [SerializeField] private float movementSpeed;
 
     private CharacterController charController;
@@ -13,9 +13,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private AnimationCurve jumpFallOff;
     [SerializeField] private float jumpMultiplier;
     [SerializeField] private KeyCode jumpKey;
+    [SerializeField] private float jumpSpeed;
 
     private bool isJumping;
-    private Vector3 verticalMove;
+    private Vector3 verticalVelocity;
+    private bool inFreefall;
 
     private void Awake()
     {
@@ -32,47 +34,66 @@ public class PlayerMovement : MonoBehaviour
 
     private void PlayerMove()
     {
-        //get the forward-backward and side-to-side movement input
-        float horizInput = Input.GetAxis(horizontalInputName);
-        float vertInput = Input.GetAxis(verticalInputName);
+        //get the forward-backward, side-to-side, and jump movement input
+        float lrInput = Input.GetAxis(leftRightInputName);
+        float fbInput = Input.GetAxis(forwardBackwardInputName);
+        bool jumpInput = Input.GetKey(jumpKey);
+        
+        // Create a unit vector in the resulting requested direction of movement.
+        Vector3 horizontalDirection = Vector3.ClampMagnitude(transform.forward * fbInput + transform.right * lrInput, 1.0f);
 
-        //apply movement
-        Vector3 forwardMovement = transform.forward * vertInput;
-        Vector3 rightMovement = transform.right * horizInput;
+        /*
+                // If a jump was requested, start a jump if we are not already in a jump.
+                // The isGrounded check is to prevent jumping in midair after falling off something. (In that case, you are not jumping, but also are not grounded.) 
+                if ( jumpInput && !isJumping && charController.isGrounded )
+                {
+                    StartCoroutine(JumpAnimation());
+                }
+                // If not jumping, need to apply gravity or you apparently encounter issues with character not actually being grounded when you would expect it to be.
+                if (!isJumping)
+                {
+                    verticalVelocity = Physics.gravity;
+                }
+        */
 
-        //get jump input
-        JumpInput();
-        // If not jumping, need to apply gravity or you encounter issues with character not actually being grounded when you would expect it to be.
-        if (!isJumping)
+        if (charController.isGrounded)
         {
-            verticalMove = Physics.gravity;
+            isJumping = false;
+            inFreefall = false;
+            verticalVelocity = Vector3.zero;
+            if (jumpInput)
+            {
+                verticalVelocity += Vector3.up * jumpSpeed;
+                isJumping = true;
+            }
         }
+        else
+        {
+            if (!inFreefall)
+            {
+                inFreefall = true;
+            }
+            // Adjust the vertical speed based on gravity.
+            verticalVelocity += Physics.gravity * Time.deltaTime;
+        }
+//        print(verticalVelocity);
         // Move the character based on the inputs
-        charController.Move(((Vector3.ClampMagnitude(forwardMovement + rightMovement, 1.0f) * movementSpeed) + verticalMove) * Time.deltaTime);
-    }
-
-    private void JumpInput()
-    {
-        //checks for the jump key being pressed
-        // The isGrounded check is to prevent jumping in midair after falling off something. (In that case, you are not jumping, but also are not grounded.) 
-        if (Input.GetKey(jumpKey) && !isJumping && charController.isGrounded)
-        {
-            isJumping = true;
-            StartCoroutine(JumpEvent());
-        }
+        Vector3 moveDisplacement = ((horizontalDirection * movementSpeed) + verticalVelocity) * Time.deltaTime;
+        charController.Move(moveDisplacement);
     }
 
     //controls jump
-    private IEnumerator JumpEvent()
+    private IEnumerator JumpAnimation()
     {
         charController.slopeLimit = 90.0f;
         float timeInAir = 0.0f;
 
+        isJumping = true;
         do
         {
             float jumpForce = jumpFallOff.Evaluate(timeInAir);
             // Set the velocity vector for this frame of the jump
-            verticalMove = Vector3.up * jumpForce * jumpMultiplier;
+            verticalVelocity = Vector3.up * jumpForce * jumpMultiplier;
             timeInAir += Time.deltaTime;
             yield return null;
         } while (!charController.isGrounded && charController.collisionFlags != CollisionFlags.Above);
@@ -80,6 +101,7 @@ public class PlayerMovement : MonoBehaviour
         charController.slopeLimit = 45.0f;
         isJumping = false;
     }
+
 }
 
 
