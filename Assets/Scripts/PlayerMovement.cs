@@ -38,7 +38,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // If the fire button has been pressed, toggle between jump/fall modes (so they are easy to compare to help decide which is preferred).
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetKeyDown("p"))
         {
             usePhysics = !usePhysics;
         }
