@@ -15,6 +15,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpMultiplier;
     [SerializeField] private KeyCode jumpKey;
     [SerializeField] private float jumpSpeed;
+    [SerializeField] private float gravityMultiplier;
+    [SerializeField] private float jumpSpeedMultiplier;
 
     private bool isJumping;
     private bool isFalling;
@@ -63,6 +65,7 @@ public class PlayerMovement : MonoBehaviour
         // Determine the horizontal velocity based on the requested horizontal direction of movement.
         // Do this by creating a unit vector in the requested direction, then multiplying it by the movement speed.
         Vector3 horizontalVelocity = Vector3.ClampMagnitude(transform.forward * fbInput + transform.right * lrInput, 1.0f) * movementSpeed;
+        
 
         if (charController.isGrounded)
         {
@@ -74,11 +77,15 @@ public class PlayerMovement : MonoBehaviour
                 verticalVelocity = Vector3.up * jumpSpeed;
             }
         }
+        else
+        {
+            horizontalVelocity *= jumpSpeedMultiplier;
+        }
 
         // Apply gravity: adjust the vertical velocity by the gravitational acceleration multiplied by the time elapsed.
         // If the character is on the ground, it will simply stay on the ground as it will collide with the ground.
         // (Apparently, this is actually necessary, because due to quirks with the CharacterController, the character sometimes ends up slightly above the ground and isGrounded is false.)
-        verticalVelocity += Physics.gravity * Time.deltaTime;
+        verticalVelocity += Physics.gravity * gravityMultiplier * Time.deltaTime;
 
         // Move the character based on the inputs.
         // Its displacement in this frame will be its current velocity vector (the sum of the horizontal and vertical velocities) multiplied by the elapsed time.
