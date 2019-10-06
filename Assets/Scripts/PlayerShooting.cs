@@ -28,10 +28,13 @@ public class PlayerShooting : MonoBehaviour
     void Shoot()
     {
         
+        //send out a raycast and print the name of the object it collided with
         RaycastHit hit;
         if (Physics.Raycast(PlayerCamera.transform.position, PlayerCamera.transform.forward, out hit, range))
         {
             Debug.Log(hit.transform.name);
+            //show the raycast in the scene window
+            Debug.DrawRay(PlayerCamera.transform.position, PlayerCamera.transform.forward, Color.green, range);
         }
         
     }
