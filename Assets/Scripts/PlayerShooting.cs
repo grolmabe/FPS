@@ -34,8 +34,7 @@ public class PlayerShooting : MonoBehaviour
         {
             Debug.Log(hit.transform.name);
             //show the raycast in the scene window
-            Debug.DrawRay(PlayerCamera.transform.position, PlayerCamera.transform.forward, Color.green, range);
         }
-        
+        Debug.DrawRay(PlayerCamera.transform.position, PlayerCamera.transform.forward * range, Color.green, 5f);
     }
 }
