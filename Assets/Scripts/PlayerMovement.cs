@@ -14,11 +14,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private AnimationCurve fallFallOff;
     [SerializeField] private float jumpMultiplier;
     [SerializeField] private KeyCode jumpKey;
+    [SerializeField] private KeyCode sprintKey;
     [SerializeField] private float jumpSpeed;
     [SerializeField] private float gravityMultiplier;
     [SerializeField] private float jumpSpeedMultiplier;
 
     private bool isJumping;
+    private bool isRunning;
     private bool isFalling;
     private Vector3 verticalVelocity;
     // Serialize this so we can see it in the Unity Inspector.
