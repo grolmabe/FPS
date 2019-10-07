@@ -9,6 +9,7 @@ public class PlayerShooting : MonoBehaviour
     public float range = 100f;
 
     public Camera PlayerCamera;
+    public ParticleSystem muzzleFlash;
 
     // Start is called before the first frame update
     void Start()
@@ -27,7 +28,7 @@ public class PlayerShooting : MonoBehaviour
 
     void Shoot()
     {
-        
+        muzzleFlash.Play(); 
         //send out a raycast and print the name of the object it collided with
         RaycastHit hit;
         if (Physics.Raycast(PlayerCamera.transform.position, PlayerCamera.transform.forward, out hit, range))
