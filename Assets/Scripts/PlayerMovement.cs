@@ -8,11 +8,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private string forwardBackwardInputName;
     [SerializeField] private float movementSpeed;
 
+    [SerializeField] private KeyCode sprintKey;
+    [SerializeField] private float sprintMultiplier;
+
     private CharacterController charController;
 
     //[SerializeField] private float jumpMultiplier;
     [SerializeField] private KeyCode jumpKey;
-    //[SerializeField] private KeyCode sprintKey;
     [SerializeField] private float jumpSpeed;
     [SerializeField] private float gravityMultiplier;
     [SerializeField] private float jumpSpeedMultiplier;
@@ -41,9 +43,11 @@ public class PlayerMovement : MonoBehaviour
         float lrInput = Input.GetAxis(leftRightInputName);
         float fbInput = Input.GetAxis(forwardBackwardInputName);
         bool jumpInput = Input.GetKey(jumpKey);
+        bool sprintInput = Input.GetKey(sprintKey);
         
         // Determine the horizontal velocity based on the requested horizontal direction of movement.
         // Do this by creating a unit vector in the requested direction, then multiplying it by the movement speed.
+
         Vector3 horizontalVelocity = Vector3.ClampMagnitude(transform.forward * fbInput + transform.right * lrInput, 1.0f) * movementSpeed;
 
         if (charController.isGrounded)
@@ -68,8 +72,16 @@ public class PlayerMovement : MonoBehaviour
 
         // Move the character based on the inputs.
         // Its displacement in this frame will be its current velocity vector (the sum of the horizontal and vertical velocities) multiplied by the elapsed time.
-        Vector3 moveDisplacement = (horizontalVelocity + verticalVelocity) * Time.deltaTime;
-        charController.Move(moveDisplacement);
+        if (sprintInput)
+        {
+            Vector3 moveDisplacement = (horizontalVelocity + verticalVelocity) * Time.deltaTime * sprintMultiplier;
+            charController.Move(moveDisplacement);
+        } else
+        {
+            Vector3 moveDisplacement = (horizontalVelocity + verticalVelocity) * Time.deltaTime;
+            charController.Move(moveDisplacement);
+        }
+        
     }
 
 }
