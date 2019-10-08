@@ -72,16 +72,13 @@ public class PlayerMovement : MonoBehaviour
 
         // Move the character based on the inputs.
         // Its displacement in this frame will be its current velocity vector (the sum of the horizontal and vertical velocities) multiplied by the elapsed time.
+        Vector3 moveDisplacement = (horizontalVelocity + verticalVelocity) * Time.deltaTime;
         if (sprintInput)
         {
-            Vector3 moveDisplacement = (horizontalVelocity + verticalVelocity) * Time.deltaTime * sprintMultiplier;
-            charController.Move(moveDisplacement);
-        } else
-        {
-            Vector3 moveDisplacement = (horizontalVelocity + verticalVelocity) * Time.deltaTime;
-            charController.Move(moveDisplacement);
+            // If player is sprinting, multiply the displacement by the sprint multiplier.
+            moveDisplacement *= sprintMultiplier;
         }
-        
+        charController.Move(moveDisplacement);
     }
 
 }
