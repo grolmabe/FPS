@@ -7,14 +7,12 @@ public class GunBase : MonoBehaviour
     public float damage;
     public float range;
     public float fireRate;
-
     public Camera PlayerCamera;
     public ParticleSystem muzzleFlash;
     public GameObject impactFlash;
     public GameObject impactDust;
-
     public bool fullAuto;
-    private float nextTimeToFire;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,22 +22,10 @@ public class GunBase : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(fullAuto == true)
-        {
-            if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire)
-            {
-                nextTimeToFire = Time.time + 1f / fireRate;
-                Shoot();
-            }
-        } else
-        {
-            if (Input.GetButtonDown("Fire1"))
-            {
-                Shoot();
-            }
-        }
+
     }
-    void Shoot()
+
+    public void Shoot()
     {
         muzzleFlash.Play();
         //send out a raycast and print the name of the object it collided with
