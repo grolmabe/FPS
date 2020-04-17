@@ -24,6 +24,7 @@ public class Weapon : MonoBehaviour
     private bool safetyOn = true; // Is the safety switch on. If so, the weapon can't be fired.
     private float nextTimeToFire = 0.0f;
 
+    public Transform shotText; //Textbox that displays ammo count
 
     // Start is called before the first frame update
     void Start()
