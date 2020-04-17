@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4465782, g: 0.49641252, b: 0.5748167, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -234,7 +234,6 @@ MonoBehaviour:
   ammo: {fileID: 2023570054}
   roundsPerShot: 1
   ammoType: 0
-  shotText: {fileID: 0}
 --- !u!4 &160209971 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2109495427020855137, guid: 150ea8b253f78854aa29bc789f53faaa,
@@ -603,6 +602,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   count: 
+  shotText: {fileID: 0}
 --- !u!1 &555336516
 GameObject:
   m_ObjectHideFlags: 0
@@ -802,7 +802,6 @@ MonoBehaviour:
   ammo: {fileID: 2023570054}
   roundsPerShot: 1
   ammoType: 0
-  shotText: {fileID: 0}
 --- !u!1001 &752401764
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1818,6 +1817,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   count: 64000000
+  shotText: {fileID: 36363300}
 --- !u!1 &2095651016
 GameObject:
   m_ObjectHideFlags: 0

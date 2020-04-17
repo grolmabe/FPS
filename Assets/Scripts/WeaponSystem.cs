@@ -97,10 +97,12 @@ public class WeaponSystem : MonoBehaviour
                 }
                 switchingWeapons = false;
             }
-            // Turn the safety off on the selected weapon.
             if (newWeapon != null)
             {
+                // Turn the safety off on the selected weapon.
                 newWeapon.SafetyOff();
+                // Switch to the ammo used by this weapon.
+                newWeapon.ammo.SelectAmmoType(newWeapon.ammoType);
             }
             // Update the index of the currently selected weapon.
             weaponIndex = index;

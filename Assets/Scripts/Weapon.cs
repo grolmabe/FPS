@@ -24,8 +24,6 @@ public class Weapon : MonoBehaviour
     private bool safetyOn = true; // Is the safety switch on. If so, the weapon can't be fired.
     private float nextTimeToFire = 0.0f;
 
-    public Transform shotText; //Textbox that displays ammo count
-
     // Start is called before the first frame update
     void Start()
     {
@@ -57,7 +55,7 @@ public class Weapon : MonoBehaviour
 
     public void Shoot()
     {
-        if ((safetyOn == false) && ((fireRate == 0.0f) || (Time.time >= nextTimeToFire)) && (ammo.Remove(ammoType, roundsPerShot) == roundsPerShot))
+        if ((safetyOn == false) && ((fireRate == 0.0f) || (Time.time >= nextTimeToFire)) && (ammo.Remove(roundsPerShot) == roundsPerShot))
         {
             muzzleFlash.Play();
             if (type == WeaponType.raycast)
