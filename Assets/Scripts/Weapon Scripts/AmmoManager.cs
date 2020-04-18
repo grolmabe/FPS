@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class AmmoManager : MonoBehaviour
 {
-    public enum AmmoType { bullets, plasmaUnits, shotgunShells }
+    public enum AmmoType { bullets, shotgunShells, plasmaUnits }
     public int[] count;
     public Transform shotText; //Textbox that displays ammo count
 

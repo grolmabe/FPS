@@ -15,8 +15,8 @@ public class Weapon : MonoBehaviour
     public float impactFlashLifespan = 1.0f;
     public float impactDustLifespan = 1.0f;
     public bool fullAuto; // Is this a fully automatic weapon?
-    public enum WeaponType {raycast, projectile};
-    public WeaponType type; // Is this a raycast weapon, or does it shoot projectiles that are actual objects in the scene?
+    //public enum WeaponType {raycast, projectile};
+    //public WeaponType type; // Is this a raycast weapon, or does it shoot projectiles that are actual objects in the scene?
     public AmmoManager ammo;
     public int roundsPerShot;
     public AmmoManager.AmmoType ammoType;
@@ -39,7 +39,7 @@ public class Weapon : MonoBehaviour
             // If this is an automatic weapon, request to fire if the fire button is currently being pressed.
             if (Input.GetButton("Fire1"))
             {
-                Shoot();
+                PullTrigger();
             }
         }
         else
@@ -47,54 +47,33 @@ public class Weapon : MonoBehaviour
             // If this is a non-automatic weapon, request to fire if the fire button was pressed.
             if (Input.GetButtonDown("Fire1"))
             {
-                Shoot();
+                PullTrigger();
             }
         }
 
     }
 
-    public void Shoot()
+    public bool PullTrigger()
     {
+        bool fired = false;
+
         if ((safetyOn == false) && ((fireRate == 0.0f) || (Time.time >= nextTimeToFire)) && (ammo.Remove(roundsPerShot) == roundsPerShot))
         {
-            muzzleFlash.Play();
-            if (type == WeaponType.raycast)
+            if (muzzleFlash != null)
             {
-                ShootRaycast();
+                muzzleFlash.Play();
             }
-            else if (type == WeaponType.projectile)
-            {
-                ShootProjectile();
-            }
+            Fire();
+            fired = true;
             if (fireRate != 0.0f)
             {
                 nextTimeToFire = Time.time + 1.0f / fireRate;
             }
         }
+        return fired;
     }
 
-    void ShootRaycast()
-    {
-        RaycastHit hit;
-
-        // Send out a raycast in the direction the weapon is aimed.
-        // We use the parent transform as the origin point, as that is the camera and gives a better experience.
-        if (Physics.Raycast(transform.parent.position, transform.parent.forward, out hit, range))
-        {
-            // The raycast hit an object.
-            // Debug.Log(hit.transform.name);
-            // Create the impact effects at the point of impact.
-            GameObject impactFlashGameObject = Instantiate(impactFlash, hit.point, Quaternion.LookRotation(hit.normal));
-            GameObject impactDustGameObject = Instantiate(impactDust, hit.point, Quaternion.LookRotation(hit.normal));
-            Destroy(impactFlashGameObject, impactFlashLifespan);
-            Destroy(impactDustGameObject, impactDustLifespan);
-            // Apply the damage to the object that was hit.
-        }
-        //show the raycast in the scene window
-        //Debug.DrawRay(transform.parent.position, transform.parent.forward * range, Color.green, 5f);
-    }
-
-    void ShootProjectile()
+    protected virtual void Fire()
     {
 
     }
