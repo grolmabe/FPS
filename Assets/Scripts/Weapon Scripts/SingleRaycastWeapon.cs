@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SingleProjectileRaycastWeapon : Weapon
+public class SingleRaycastWeapon : Weapon
 {
     protected override void Fire()
     {

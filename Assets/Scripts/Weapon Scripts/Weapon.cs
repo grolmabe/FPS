@@ -25,7 +25,7 @@ public class Weapon : MonoBehaviour
     private float nextTimeToFire = 0.0f;
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
 
     }
