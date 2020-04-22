@@ -23,6 +23,7 @@ public class SingleProjectileWeapon : Weapon
         RaycastHit hit;
         Vector3 adjustedDirection;
         int saveLayer;
+        float playerVelocityComponent;
 
         // Since our crosshairs are relative to the camera, but our projectile
         // needs to originate from the weapon, we need to have the projectile
@@ -39,7 +40,7 @@ public class SingleProjectileWeapon : Weapon
             Debug.Log("Raycast hit object " + hit.collider.gameObject.name);
             adjustedDirection = hit.point - transform.position;
         }
-        else
+        
         {
             // The raycast didn't hit an object. The direction for the
             // projectile is from the weapon to the point where the parent
@@ -52,13 +53,22 @@ public class SingleProjectileWeapon : Weapon
         projectile = Instantiate(projectilePrefab, transform.position + transform.forward * projectileOffset, Quaternion.identity);
         if (projectile != null)
         {
+            // Add this object to the "Ignore Raycast" layer so that a future
+            // aiming raycast won't hit this projectile. (In early testing,
+            // this was happening, leading to undesireable trajectories.)
+            projectile.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
             // Ignore collisions between the projectile and the player object.
             // This prevents issues if the player is looking almost directly
             // down and the gun ends up inside the player object (because the
             // projectile might then start inside the player object).
             Physics.IgnoreCollision(projectile.GetComponent<Collider>(), player.GetComponent<Collider>());
+            // Determine the component of the player's velocity in the projectile's direction.
+            // So we can add this to the projectile's speed relative to the weapon.
+            playerVelocityComponent = Vector3.Dot(player.GetComponent<PlayerMovement>().GetVelocity(), adjustedDirection.normalized);
+            Debug.Log("player's velocity = " + player.GetComponent<PlayerMovement>().GetVelocity());
+            Debug.Log("playerVelocityComponent = " + playerVelocityComponent);
             pm = projectile.GetComponent<ProjectileMovement>();
-            pm.velocity = adjustedDirection.normalized * projectileSpeed;
+            pm.velocity = adjustedDirection.normalized * (projectileSpeed + playerVelocityComponent);
             pm.range = range;
         }
     }
