@@ -37,7 +37,7 @@ public class SingleProjectileWeapon : Weapon
             // The raycast hit an object. The direction for the projectile is
             // from the position of the weapon to the point where the raycast
             // hit the object.
-            Debug.Log("Raycast hit object " + hit.collider.gameObject.name);
+            //Debug.Log("Raycast hit object " + hit.collider.gameObject.name);
             adjustedDirection = hit.point - transform.position;
         }
         
@@ -65,8 +65,8 @@ public class SingleProjectileWeapon : Weapon
             // Determine the component of the player's velocity in the projectile's direction.
             // So we can add this to the projectile's speed relative to the weapon.
             playerVelocityComponent = Vector3.Dot(player.GetComponent<PlayerMovement>().GetVelocity(), adjustedDirection.normalized);
-            Debug.Log("player's velocity = " + player.GetComponent<PlayerMovement>().GetVelocity());
-            Debug.Log("playerVelocityComponent = " + playerVelocityComponent);
+            //Debug.Log("player's velocity = " + player.GetComponent<PlayerMovement>().GetVelocity());
+            //Debug.Log("playerVelocityComponent = " + playerVelocityComponent);
             pm = projectile.GetComponent<ProjectileMovement>();
             pm.velocity = adjustedDirection.normalized * (projectileSpeed + playerVelocityComponent);
             pm.range = range;
