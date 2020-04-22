@@ -18,11 +18,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpSpeed;
     [SerializeField] private float gravityMultiplier;
     [SerializeField] private float jumpSpeedMultiplier;
+    private Vector3 currentVelocity;
 
     //private bool isJumping;
     //private bool isRunning;
     //private bool isFalling;
     private Vector3 verticalVelocity;
+    private Vector3 horizontalVelocity;
 
     private void Awake()
     {
@@ -44,11 +46,16 @@ public class PlayerMovement : MonoBehaviour
         float fbInput = Input.GetAxis(forwardBackwardInputName);
         bool jumpInput = Input.GetKey(jumpKey);
         bool sprintInput = Input.GetKey(sprintKey);
-        
+
         // Determine the horizontal velocity based on the requested horizontal direction of movement.
         // Do this by creating a unit vector in the requested direction, then multiplying it by the movement speed.
 
-        Vector3 horizontalVelocity = Vector3.ClampMagnitude(transform.forward * fbInput + transform.right * lrInput, 1.0f) * movementSpeed;
+        horizontalVelocity = Vector3.ClampMagnitude(transform.forward * fbInput + transform.right * lrInput, 1.0f) * movementSpeed;
+        if (sprintInput)
+        {
+            // If player is sprinting, multiply the horizontal velocity by the sprint multiplier.
+            horizontalVelocity *= sprintMultiplier;
+        }
 
         if (charController.isGrounded)
         {
@@ -62,6 +69,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
+            // If the character is in the air, multiply its horizontal velocity by the jumpSpeedMultiplier.
             horizontalVelocity *= jumpSpeedMultiplier;
         }
 
@@ -72,15 +80,18 @@ public class PlayerMovement : MonoBehaviour
 
         // Move the character based on the inputs.
         // Its displacement in this frame will be its current velocity vector (the sum of the horizontal and vertical velocities) multiplied by the elapsed time.
-        Vector3 moveDisplacement = (horizontalVelocity + verticalVelocity) * Time.deltaTime;
-        if (sprintInput)
-        {
-            // If player is sprinting, multiply the displacement by the sprint multiplier.
-            moveDisplacement *= sprintMultiplier;
-        }
-        charController.Move(moveDisplacement);
+        charController.Move((horizontalVelocity + verticalVelocity) * Time.deltaTime);
     }
 
+    public Vector3 GetVelocity()
+    {
+        // Need this to account for the fact that we apply gravity even if the character is on the ground.
+        if (charController.isGrounded && verticalVelocity.y < 0)
+        {
+            return horizontalVelocity;
+        }
+        return horizontalVelocity + verticalVelocity;
+    }
 }
 
 
