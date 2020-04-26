@@ -20,6 +20,8 @@ public class Weapon : MonoBehaviour
     public AmmoManager ammo;
     public int roundsPerShot;
     public AmmoManager.AmmoType ammoType;
+    public WeaponSystem.WeaponType weaponType;
+    public bool isActivated = false; // Is this weapon in the player's weapon inventory?
 
     private bool safetyOn = true; // Is the safety switch on. If so, the weapon can't be fired.
     private float nextTimeToFire = 0.0f;

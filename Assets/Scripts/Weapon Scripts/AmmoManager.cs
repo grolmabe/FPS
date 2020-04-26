@@ -46,12 +46,21 @@ public class AmmoManager : MonoBehaviour
 
     public int Add(int num)
     {
+        return Add(num, currentType);
+    }
+
+    public int Add(int num, AmmoType type)
+    {
         if (num > 0)
         {
-            count[(int)currentType] += num;
-            shotText.GetComponent<Text>().text = count[(int)currentType].ToString();
+            Debug.Log("Adding " + num + " rounds of type " + type + " with index " + (int)type + " into array of length " + count.Length);
+            count[(int)type] += num;
+            if (type == currentType)
+            {
+                shotText.GetComponent<Text>().text = count[(int)currentType].ToString();
+            }
         }
-        return count[(int)currentType];
+        return count[(int)type];
     }
 
     public void SelectAmmoType(AmmoType type)
