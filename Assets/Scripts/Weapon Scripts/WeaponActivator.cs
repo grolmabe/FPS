@@ -5,7 +5,7 @@ using UnityEngine;
 public class WeaponActivator : MonoBehaviour
 {
     public WeaponSystem.WeaponType weaponType; // The type of weapon this will activate.
-
+    public float rotationTime = 2f;
     public int rounds; // The number of rounds of ammunition included with the activation.
 
     // Start is called before the first frame update
@@ -17,7 +17,10 @@ public class WeaponActivator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if ( rotationTime != 0f )
+        {
+            transform.Rotate(new Vector3(0f, (360f / rotationTime) * Time.deltaTime, 0f));
+        }
     }
 
     void OnTriggerEnter(Collider collider)
