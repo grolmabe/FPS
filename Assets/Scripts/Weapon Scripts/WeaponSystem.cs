@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WeaponSystem : MonoBehaviour
 {
-    public enum WeaponType { pistol, shotgun, musket, revoRifle };
+    public enum WeaponType { pistol, shotgun, musket, revoRifle, bigGun };
     public GameObject[] weapons = null;
     public float switchSpeed = 0.0f;
 
@@ -43,6 +43,10 @@ public class WeaponSystem : MonoBehaviour
             {
                 SelectWeapon(3);
             }
+			else if (Input.GetButtonDown("Weapon5"))
+			{
+				SelectWeapon(4);
+			}
             if (Input.mouseScrollDelta.y > 0)
             {
                 i = 1;
