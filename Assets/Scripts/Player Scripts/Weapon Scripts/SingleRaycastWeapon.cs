@@ -18,7 +18,8 @@ public class SingleRaycastWeapon : Weapon
         // Send out a raycast in the given direction.
         if (Physics.Raycast(transform.parent.position, direction, out hit, range))
         {
-            // The raycast hit an object.
+            // The raycast hit an object. Tell the object it was hit.
+            hit.transform.gameObject.SendMessage("HitByWeapon", damage);
             // Debug.Log(hit.transform.name);
             // Create the impact effects at the point of impact.
             GameObject impactFlashGameObject = Instantiate(impactFlash, hit.point, Quaternion.LookRotation(hit.normal));

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6553041448510721395}
   - component: {fileID: 6553041448510721404}
   - component: {fileID: 6553041448510721405}
+  - component: {fileID: 3223270379254381104}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -66,60 +67,25 @@ MonoBehaviour:
   leftRightInputName: Horizontal
   forwardBackwardInputName: Vertical
   movementSpeed: 8
-  jumpFallOff:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 2.0014172
-      value: -1.0088587
-      inSlope: 0.0029173123
-      outSlope: 0.0029173123
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.15859097
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  fallFallOff:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: -0.0016593933
-      inSlope: -2.6561854
-      outSlope: -2.6561854
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.087181784
-    - serializedVersion: 3
-      time: 0.99976003
-      value: -0.99855626
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  jumpMultiplier: 5
+  sprintKey: 0
+  sprintMultiplier: 0
   jumpKey: 32
   jumpSpeed: 16
   gravityMultiplier: 5
   jumpSpeedMultiplier: 1.25
-  usePhysics: 0
+--- !u!114 &3223270379254381104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6553041448510721407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c63608c9b2b639418aea81bba2e4552, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Health: 100
 --- !u!1 &6553041448707669181
 GameObject:
   m_ObjectHideFlags: 0
