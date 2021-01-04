@@ -10,6 +10,8 @@ public class AmmoManager : MonoBehaviour
     public Transform shotText; //Textbox that displays ammo count
 
     private AmmoType currentType;
+    private string fieldLabel = "Ammo: ";
+
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +22,7 @@ public class AmmoManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public int Remove(int numRequested, bool allOrNone = true)
@@ -40,7 +42,10 @@ public class AmmoManager : MonoBehaviour
             numReturned = numRequested;
             count[(int)currentType] -= numRequested;
         }
-        shotText.GetComponent<Text>().text = count[(int)currentType].ToString();
+        if (shotText != null)
+        {
+            shotText.GetComponent<Text>().text = fieldLabel + count[(int)currentType].ToString();
+        }
         return numReturned;
     }
 
@@ -53,11 +58,11 @@ public class AmmoManager : MonoBehaviour
     {
         if (num > 0)
         {
-            Debug.Log("Adding " + num + " rounds of type " + type + " with index " + (int)type + " into array of length " + count.Length);
+            //Debug.Log("Adding " + num + " rounds of type " + type + " with index " + (int)type + " into array of length " + count.Length);
             count[(int)type] += num;
-            if (type == currentType)
+            if ( (type == currentType) && (shotText != null) )
             {
-                shotText.GetComponent<Text>().text = count[(int)currentType].ToString();
+                shotText.GetComponent<Text>().text = fieldLabel + count[(int)currentType].ToString();
             }
         }
         return count[(int)type];
@@ -68,7 +73,11 @@ public class AmmoManager : MonoBehaviour
         if ( ((int)type >= 0) && ((int)type < count.Length))
         {
             currentType = type;
-            shotText.GetComponent<Text>().text = count[(int)currentType].ToString();
+            if (shotText != null)
+            {
+                //Debug.Log("Switching to ammo type " + ((int)currentType).ToString() + " with count of " + count[(int)currentType].ToString() + ". Label should be " + fieldLabel + count[(int)currentType].ToString());
+                shotText.GetComponent<Text>().text = fieldLabel + count[(int)currentType].ToString();
+            }
         }
     }
 

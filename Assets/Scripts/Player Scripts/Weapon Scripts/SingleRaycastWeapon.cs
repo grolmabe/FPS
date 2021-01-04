@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class SingleRaycastWeapon : Weapon
 {
+    protected override void Start()
+    {
+        base.Start();
+    }
+
     protected override void Fire()
     {
         // Send out a raycast in the direction the weapon is aimed.

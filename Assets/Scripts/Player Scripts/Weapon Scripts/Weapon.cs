@@ -35,24 +35,11 @@ public class Weapon : MonoBehaviour
     // Update is called once per frame if this object is active.
     void Update()
     {
-        // Check for the weapon being fired.
-        if (fullAuto == true)
+        // Check if the weapon should be fired.
+        if (FireRequested())
         {
-            // If this is an automatic weapon, request to fire if the fire button is currently being pressed.
-            if (Input.GetButton("Fire1"))
-            {
-                PullTrigger();
-            }
+            PullTrigger();
         }
-        else
-        {
-            // If this is a non-automatic weapon, request to fire if the fire button was pressed.
-            if (Input.GetButtonDown("Fire1"))
-            {
-                PullTrigger();
-            }
-        }
-
     }
 
     public bool PullTrigger()
@@ -73,6 +60,30 @@ public class Weapon : MonoBehaviour
             }
         }
         return fired;
+    }
+
+    // By default, this is a weapon used by the player, so the "Fire1" button determines if there has been a request to fire.
+    // This method can be overridden in a derived class to change the behaviour.
+    protected virtual bool FireRequested()
+    {
+        // Check if there was a request to fire the weapon.
+        if (fullAuto == true)
+        {
+            // If this is an automatic weapon, request to fire if the fire button is currently being pressed.
+            if (Input.GetButton("Fire1"))
+            {
+                return true;
+            }
+        }
+        else
+        {
+            // If this is a non-automatic weapon, request to fire if the fire button was pressed.
+            if (Input.GetButtonDown("Fire1"))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     protected virtual void Fire()

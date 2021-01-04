@@ -23,7 +23,7 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     void HitByWeapon(float damage)
@@ -42,4 +42,5 @@ public class Enemy : MonoBehaviour
             }
         }
     }
+
 }
